@@ -106,22 +106,19 @@ namespace ApplicationConnectDb
             CurrentGroup = GroupHandler.GetGroupById(CurrentGroup.Id);
             for (int i = 0; i < CurrentGroup.Students.Count; i++)
             {             
-                if(
-                    (int)dataGridView1.Rows[i].Cells[0].Value != CurrentGroup.Students[i].Id
-                    ||
+                if(                  
                     (string)dataGridView1.Rows[i].Cells[1].Value != CurrentGroup.Students[i].LastName
                     ||
                     (string)dataGridView1.Rows[i].Cells[2].Value != CurrentGroup.Students[i].FirstName
                     ||
                     (string)dataGridView1.Rows[i].Cells[3].Value != CurrentGroup.Students[i].Patronymic
-
                     )
                 {
                     using var db = new Context();
                     var student = db.Students.FirstOrDefault(s => s.Id == (int)dataGridView1.Rows[i].Cells[0].Value);
-                    student.FirstName = (string)dataGridView1.Rows[i].Cells[1].Value;
+                    student.LastName = (string)dataGridView1.Rows[i].Cells[1].Value;
                     student.FirstName = (string)dataGridView1.Rows[i].Cells[2].Value;
-                    student.FirstName = (string)dataGridView1.Rows[i].Cells[3].Value;
+                    student.Patronymic = (string)dataGridView1.Rows[i].Cells[3].Value;
                     db.Students.Update(student);
                     db.SaveChanges();
                 }           
