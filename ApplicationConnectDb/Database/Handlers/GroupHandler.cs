@@ -18,10 +18,11 @@ namespace ApplicationConnectDb.Database.Handlers
             db.Groups.Update(group);
             db.SaveChanges();
         }
-        public static void RemoveStudent(Group group, int studentId)
+        public static void RemoveStudent(int studentId)
         {         
             using var db = new Context();
-            var student = db.Students.FirstOrDefault(s=>s.Id == studentId);         
+            var student = db.Students.FirstOrDefault(s=>s.Id == studentId);
+            if (student == null) return;
             db.Students.Remove(student);
             db.SaveChanges();
         }

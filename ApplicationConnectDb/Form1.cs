@@ -97,7 +97,7 @@ namespace ApplicationConnectDb
                 MessageBox.Show("Сначала выберите id студента!");
                 return;
             }
-            GroupHandler.RemoveStudent(CurrentGroup, CurrentSelectedIdStudent);
+            GroupHandler.RemoveStudent(CurrentSelectedIdStudent);
             UpdateTable();
         }
         //обновить запись
@@ -129,7 +129,10 @@ namespace ApplicationConnectDb
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value is int)
+            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value is int
+                && dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value!=null
+                && e.ColumnIndex == 0
+                )
             {
                 CurrentSelectedIdStudent = (int)dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
             }
