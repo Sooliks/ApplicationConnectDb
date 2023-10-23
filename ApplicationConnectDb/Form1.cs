@@ -1,3 +1,4 @@
+using ApplicationConnectDb.Database;
 using ApplicationConnectDb.Database.Handlers;
 using ApplicationConnectDb.Database.Models;
 using Google.Protobuf.WellKnownTypes;
@@ -11,6 +12,7 @@ namespace ApplicationConnectDb
         private static List<Group> Groups = new List<Group>();
         private static Group CurrentGroup { get; set; } = null;
         private static int GeneralCountStudents { get; set; }
+        private static int CurrentSelectedIdStudent { get; set; } = 0;
         public Form1()
         {
             InitializeComponent();
@@ -53,6 +55,7 @@ namespace ApplicationConnectDb
                 textBox2.Text = "";
                 textBox3.Text = "";
                 UpdateStudentsGroup();
+                UpdateTable();
                 return;
             }
             MessageBox.Show("Сначала выберите группу!");
@@ -60,12 +63,17 @@ namespace ApplicationConnectDb
         //обновить таблицу
         private void button2_Click(object sender, EventArgs e)
         {
-            if(CurrentGroup == null)
+            Groups = GroupHandler.GetGroups();
+            if (CurrentGroup == null)
             {
                 MessageBox.Show("Для начала выберите группу!");
                 return;
-            }          
-            dataGridView1.Columns.Clear();
+            }
+            UpdateTable();
+        }
+        private void UpdateTable()
+        {
+            CurrentGroup = GroupHandler.GetGroupById(CurrentGroup.Id);
             dataGridView1.Rows.Clear();
             for (int i = 0; i < CurrentGroup.Students.Count; i++)
             {
@@ -79,20 +87,54 @@ namespace ApplicationConnectDb
         //удалить запись
         private void button3_Click(object sender, EventArgs e)
         {
-
+            if (CurrentGroup == null)
+            {
+                MessageBox.Show("Сначала выберите группу!");
+                return;
+            }
+            if (CurrentSelectedIdStudent == 0)
+            {
+                MessageBox.Show("Сначала выберите id студента!");
+                return;
+            }
+            GroupHandler.RemoveStudent(CurrentGroup, CurrentSelectedIdStudent);
+            UpdateTable();
         }
         //обновить запись
         private void button4_Click(object sender, EventArgs e)
         {
+            CurrentGroup = GroupHandler.GetGroupById(CurrentGroup.Id);
+            for (int i = 0; i < CurrentGroup.Students.Count; i++)
+            {             
+                if(
+                    (int)dataGridView1.Rows[i].Cells[0].Value != CurrentGroup.Students[i].Id
+                    ||
+                    (string)dataGridView1.Rows[i].Cells[1].Value != CurrentGroup.Students[i].LastName
+                    ||
+                    (string)dataGridView1.Rows[i].Cells[2].Value != CurrentGroup.Students[i].FirstName
+                    ||
+                    (string)dataGridView1.Rows[i].Cells[3].Value != CurrentGroup.Students[i].Patronymic
 
+                    )
+                {
+                    using var db = new Context();
+                    var student = db.Students.FirstOrDefault(s => s.Id == (int)dataGridView1.Rows[i].Cells[0].Value);
+                    student.FirstName = (string)dataGridView1.Rows[i].Cells[1].Value;
+                    student.FirstName = (string)dataGridView1.Rows[i].Cells[2].Value;
+                    student.FirstName = (string)dataGridView1.Rows[i].Cells[3].Value;
+                    db.Students.Update(student);
+                    db.SaveChanges();
+                }           
+            }
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            var senderGrid = (DataGridView)sender;
-            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value is int)
             {
-                
+                CurrentSelectedIdStudent = (int)dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
             }
         }
     }

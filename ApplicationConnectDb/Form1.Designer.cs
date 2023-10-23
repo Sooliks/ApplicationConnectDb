@@ -42,6 +42,7 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            label5 = new Label();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
             Column3 = new DataGridViewTextBoxColumn();
@@ -107,7 +108,7 @@
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.Size = new Size(772, 229);
             dataGridView1.TabIndex = 6;
-            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.CellClick += dataGridView1_CellClick;
             // 
             // button2
             // 
@@ -174,6 +175,15 @@
             label4.Size = new Size(0, 15);
             label4.TabIndex = 13;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(299, 514);
+            label5.Name = "label5";
+            label5.Size = new Size(215, 15);
+            label5.TabIndex = 14;
+            label5.Text = "Чтобы удалить запись, выделите её Id";
+            // 
             // Column1
             // 
             Column1.HeaderText = "Id";
@@ -184,25 +194,23 @@
             // 
             Column2.HeaderText = "Фамилия";
             Column2.Name = "Column2";
-            Column2.ReadOnly = true;
             // 
             // Column3
             // 
             Column3.HeaderText = "Имя";
             Column3.Name = "Column3";
-            Column3.ReadOnly = true;
             // 
             // Column4
             // 
             Column4.HeaderText = "Отчество";
             Column4.Name = "Column4";
-            Column4.ReadOnly = true;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 578);
+            Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -240,6 +248,7 @@
         private Label label2;
         private Label label3;
         private Label label4;
+        private Label label5;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
